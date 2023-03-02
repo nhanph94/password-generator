@@ -1,0 +1,81 @@
+.checkboxRoot {
+  @apply flex items-center gap-2 cursor-pointer;
+}
+
+.checkboxMask {
+  --border-default: #bbbbc1;
+  --border-hover: #9898a3;
+  --active: rgb(96 165 250 / var(--tw-text-opacity, 1));
+  --active-tick: #ffffff;
+
+  @apply w-4 h-4 cursor-pointer relative block;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.checkboxMask > svg {
+  @apply absolute block;
+}
+
+.checkboxMask > input[type="checkbox"] {
+  @apply block outline-none border-none p-0 m-0 w-4 h-4;
+  -webkit-appearance: none;
+  border-radius: 36%/36%;
+  box-shadow: inset 0 0 0 1.5px var(--border, var(--border-default));
+  background: var(--background, transparent);
+  transition: background 0.25s linear, box-shadow 0.25s linear;
+}
+
+.checkboxMask > input[type="checkbox"] + svg {
+  @apply text-blue-400 left-0 top-0;
+  width: 21px;
+  height: 18px;
+}
+
+.checkboxMask > input[type="checkbox"] + svg .tick {
+  stroke-dasharray: 20;
+  stroke-dashoffset: var(--stroke-dashoffset, 20);
+  transition: stroke-dashoffset 0.2s;
+}
+
+.checkboxMask > input[type="checkbox"] + svg .tick.mask {
+  stroke: var(--active-tick);
+}
+
+.checkboxMask > input[type="checkbox"] + svg + svg {
+  @apply fill-none;
+  width: 11px;
+  height: 11px;
+  stroke: var(--active);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  top: -6px;
+  right: -10px;
+  stroke-dasharray: 4.5px;
+  stroke-dashoffset: 13.5px;
+  pointer-events: none;
+  -webkit-animation: var(--animation, none) 0.2s ease 0.175s;
+  animation: var(--animation, none) 0.2s ease 0.175s;
+}
+
+.checkboxMask > input[type="checkbox"]:checked {
+  --background: var(--active);
+  --border: var(--active);
+}
+
+.checkboxMask > input[type="checkbox"]:checked + svg {
+  --stroke-dashoffset: 0;
+}
+
+.checkboxMask > input[type="checkbox"]:checked + svg + svg {
+  --animation: check;
+}
+
+.checkboxMask:hover > input[type="checkbox"]:not(:checked) {
+  --border: var(--border-hover);
+}
+
+@keyframes check {
+  100% {
+    stroke-dashoffset: 4.5px;
+  }
+}

@@ -1,0 +1,28 @@
+.sliderRoot {
+  @apply relative;
+}
+
+.sliderRoot input[type="range"] {
+  @apply w-full relative;
+  -webkit-appearance: none;
+}
+
+.sliderRoot input[type="range"]:before {
+  @apply h-1 absolute bg-blue-400;
+  content: "";
+  width: var(--range);
+}
+
+.sliderRoot input[type="range"]::-webkit-slider-runnable-track {
+  @apply h-1 bg-gray-400 rounded-full;
+}
+
+.sliderRoot input[type="range"]::-webkit-slider-thumb {
+  @apply w-4 h-4 rounded-full cursor-grab bg-white shadow-blue-400;
+  -webkit-appearance: none;
+  margin-top: -6px;
+  z-index: 99;
+  position: relative;
+  transition: 0.5s all ease;
+  box-shadow: 0 0 0 2px var(--tw-shadow-color);
+}

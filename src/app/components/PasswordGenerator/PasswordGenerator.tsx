@@ -25,6 +25,7 @@ const PasswordGenerator = () => {
 
   const [password, setPassword] = useState<string>("");
   const [pwdStrengthPoint, setPwdStrengthPoint] = useState<number>(0);
+  const [copied, setCopied] = useState(false);
 
   const updateSetting = useDebounce(
     (settingUpdated: { [key: string]: boolean | number }) => {
@@ -49,11 +50,19 @@ const PasswordGenerator = () => {
     setPwdStrengthPoint(strengthPoint);
   };
 
-  const copyClipboard = () => {
+  const copyClipboard = async () => {
     const clipboard = navigator.clipboard;
-
-    clipboard.writeText(password).then(() => alert("password copied!!!"));
+    await clipboard.writeText(password);
+    setCopied(true);
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (copied) setCopied(false);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [copied]);
 
   useEffect(() => {
     createPassword();
@@ -68,18 +77,32 @@ const PasswordGenerator = () => {
       }}
     >
       <div className={styles.outputField}>
-        <input type="text" value={password} readOnly />
+        <input type="text" value={password} aria-label="password" readOnly />
 
         <button
           type="button"
-          className={styles.copyPass}
+          className={[styles.copyPass, copied ? "text-green-500" : ""].join(
+            " "
+          )}
+          aria-label="Copy password"
           onClick={copyClipboard}
+          disabled={copied}
         >
-          <svg height="24" viewBox="0 0 24 24" width="24">
-            <path
-              d="m13 20a5.006 5.006 0 0 0 5-5v-8.757a3.972 3.972 0 0 0 -1.172-2.829l-2.242-2.242a3.972 3.972 0 0 0 -2.829-1.172h-4.757a5.006 5.006 0 0 0 -5 5v10a5.006 5.006 0 0 0 5 5zm-9-5v-10a3 3 0 0 1 3-3s4.919.014 5 .024v1.976a2 2 0 0 0 2 2h1.976c.01.081.024 9 .024 9a3 3 0 0 1 -3 3h-6a3 3 0 0 1 -3-3zm18-7v11a5.006 5.006 0 0 1 -5 5h-9a1 1 0 0 1 0-2h9a3 3 0 0 0 3-3v-11a1 1 0 0 1 2 0z"
-              fill="currentColor"
-            />
+          <svg viewBox="0 0 24 24" fill={copied ? "none" : undefined}>
+            <path d="m13 20a5.006 5.006 0 0 0 5-5v-8.757a3.972 3.972 0 0 0 -1.172-2.829l-2.242-2.242a3.972 3.972 0 0 0 -2.829-1.172h-4.757a5.006 5.006 0 0 0 -5 5v10a5.006 5.006 0 0 0 5 5zm-9-5v-10a3 3 0 0 1 3-3s4.919.014 5 .024v1.976a2 2 0 0 0 2 2h1.976c.01.081.024 9 .024 9a3 3 0 0 1 -3 3h-6a3 3 0 0 1 -3-3zm18-7v11a5.006 5.006 0 0 1 -5 5h-9a1 1 0 0 1 0-2h9a3 3 0 0 0 3-3v-11a1 1 0 0 1 2 0z" />
+          </svg>
+
+          <svg
+            viewBox="0 0 16 16"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeDasharray={50}
+            strokeDashoffset={copied ? 0 : -50}
+            fill="none"
+          >
+            <path d="M13.25 4.75L6 12L2.75 8.75" />
           </svg>
         </button>
       </div>
@@ -98,8 +121,11 @@ const PasswordGenerator = () => {
 
       <div className={styles.passLength}>
         <div className="flex justify-between">
-          <label className="font-bold">Password Length</label>
+          <label className="font-bold" htmlFor="password-length">
+            Password Length
+          </label>
           <input
+            id="password-length"
             className={styles.passLengthValue}
             type="number"
             min={config.passLength.min}
@@ -110,6 +136,7 @@ const PasswordGenerator = () => {
         </div>
 
         <Slider
+          aria-label="password-length-slider"
           min={config.passLength.min}
           max={config.passLength.max}
           value={settings.length}

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.1] - 2023-03-02
+
+Update SEO info for site
+
+### Add
+
+- Add SEO head meta tag
+
 ## [v0.1.0] - 2023-03-02
 
 Release beta version

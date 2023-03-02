@@ -13,7 +13,7 @@ function App() {
       <div className={styles.wrapper}>
         <header className="mb-4">
           <h1 className={styles.title}>{__APP_NAME__}</h1>
-          <h3>{__APP_DESCRIPTION__}</h3>
+          <h2>{__APP_DESCRIPTION__}</h2>
         </header>
 
         <hr className="mb-6" />

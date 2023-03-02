@@ -1,17 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import Checkbox from "src/app/components/Checkbox/Checkbox";
 import Slider from "src/app/components/Slider/Slider";
-import { passwordGenerator } from "src/app/services";
-import styles from "./PasswordGenerator.module.css";
+import { passwordGenerator, passwordStrengthChecker } from "src/app/services";
+import { PasswordSetting } from "src/app/types";
 
-type PasswordSettings = {
-  length: number;
-  lowercase: boolean;
-  uppercase: boolean;
-  numeric: boolean;
-  symbol: boolean;
-};
+import styles from "./PasswordGenerator.module.css";
 
 const PasswordGenerator = () => {
   const config = {
@@ -20,60 +14,57 @@ const PasswordGenerator = () => {
       min: 6,
       max: 50,
     },
-    passStrengthRegex: {
-      strong: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/g,
-      medium:
-        /((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))/g,
-    },
   };
-  const outputRef = useRef<HTMLInputElement>(null);
-  const [settings, setSettings] = useState<PasswordSettings>({
+
+  const [settings, setSettings] = useState<PasswordSetting>({
     length: config.passLength.defaultValue,
-    lowercase: true,
     uppercase: true,
     numeric: true,
     symbol: true,
+    excludeAmbiguous: false,
   });
   const [password, setPassword] = useState<string>("");
-  const [pwdStrengthPoint, setPwdStrengthPoint] = useState();
+  const [pwdStrengthPoint, setPwdStrengthPoint] = useState<number>();
 
-  const generatePassword = () => {
+  const createPassword = () => {
     const pwd = passwordGenerator(settings);
     setPassword(pwd);
+    const strengthPoint = passwordStrengthChecker(pwd);
+    setPwdStrengthPoint(strengthPoint);
   };
 
   const updateSetting = (settingUpdated: {
     [key: string]: boolean | number;
   }) => {
-    setSettings({
-      ...settings,
-      ...settingUpdated,
-    });
-    generatePassword();
+    setSettings(
+      (settings) =>
+        (settings = {
+          ...settings,
+          ...settingUpdated,
+        })
+    );
   };
 
   const copyClipboard = () => {
     const clipboard = navigator.clipboard;
 
-    clipboard
-      .writeText(outputRef.current?.value + "")
-      .then(() => alert("password copied!!!"));
+    clipboard.writeText(password).then(() => alert("password copied!!!"));
   };
 
   useEffect(() => {
-    generatePassword();
-  }, []);
+    createPassword();
+  }, [settings]);
 
   return (
     <form
       className={styles.formRoot}
       onSubmit={(e) => {
         e.preventDefault();
-        generatePassword();
+        createPassword();
       }}
     >
       <div className={styles.outputField}>
-        <input ref={outputRef} type="text" value={password} readOnly />
+        <input type="text" value={password} readOnly />
 
         <button
           type="button"
@@ -121,17 +112,8 @@ const PasswordGenerator = () => {
 
         <div className={styles.row}>
           <Checkbox
-            name="lowercase"
-            label="Lowercase (a-z)"
-            checked={!!settings.lowercase}
-            onChange={(e) =>
-              updateSetting({ [e.target.name + ""]: e.target.checked })
-            }
-          />
-
-          <Checkbox
             name="uppercase"
-            label="Uppercase (A-Z)"
+            label="Include Uppercase Characters (A-Z)"
             checked={!!settings.uppercase}
             onChange={(e) =>
               updateSetting({ [e.target.name + ""]: e.target.checked })
@@ -140,7 +122,7 @@ const PasswordGenerator = () => {
 
           <Checkbox
             name="numeric"
-            label="Number (0-9)"
+            label="Include Numbers (0-9)"
             checked={!!settings.numeric}
             onChange={(e) =>
               updateSetting({ [e.target.name + ""]: e.target.checked })
@@ -149,12 +131,23 @@ const PasswordGenerator = () => {
 
           <Checkbox
             name="symbol"
-            label="Symbol (!@#$%...)"
+            label="Include Symbols (e.g !@#$%...)"
             checked={!!settings.symbol}
             onChange={(e) =>
               updateSetting({ [e.target.name + ""]: e.target.checked })
             }
           />
+
+          <div className="col-span-2">
+            <Checkbox
+              name="excludeAmbiguous"
+              label={`Exclude Ambiguous Characters ( { } [ ] ( ) / \ ' " \` ~ , ; : . < >)`}
+              checked={!!settings.excludeAmbiguous}
+              onChange={(e) =>
+                updateSetting({ [e.target.name + ""]: e.target.checked })
+              }
+            />
+          </div>
         </div>
       </div>
 

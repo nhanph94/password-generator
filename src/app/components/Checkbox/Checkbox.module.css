@@ -1,5 +1,5 @@
 .checkboxRoot {
-  @apply flex items-center gap-2 cursor-pointer;
+  @apply flex gap-2 cursor-pointer;
 }
 
 .checkboxMask {
@@ -8,7 +8,7 @@
   --active: rgb(96 165 250 / var(--tw-text-opacity, 1));
   --active-tick: #ffffff;
 
-  @apply w-4 h-4 cursor-pointer relative block;
+  @apply w-4 h-4 cursor-pointer relative block mt-1;
   -webkit-tap-highlight-color: transparent;
 }
 

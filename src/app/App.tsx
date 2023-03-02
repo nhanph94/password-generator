@@ -1,3 +1,8 @@
+declare const __APP_VERSION__: string;
+declare const __APP_NAME__: string;
+declare const __APP_DESCRIPTION__: string;
+declare const __BUILD_VERSION__: string;
+
 import { PasswordGenerator } from "src/app/components";
 
 import styles from "./App.module.css";
@@ -7,8 +12,8 @@ function App() {
     <main className={styles.appRoot}>
       <div className={styles.wrapper}>
         <header className="mb-4">
-          <h1 className={styles.title}>Password Generator</h1>
-          <h3>A simple app help generate password</h3>
+          <h1 className={styles.title}>{__APP_NAME__}</h1>
+          <h3>{__APP_DESCRIPTION__}</h3>
         </header>
 
         <hr className="mb-6" />
@@ -19,8 +24,12 @@ function App() {
 
         <footer>
           <div className="text-center text-gray-400 italic text-sm">
-            Copyright &copy; 2023; Code by Nhan Phan. <br />
-            Version v0.1.0 build 20230302
+            <div>
+              Copyright &copy; {new Date().getFullYear()}; Code by Nhan Phan.
+            </div>
+            <div>
+              Version v{__APP_VERSION__} build {__BUILD_VERSION__}
+            </div>
           </div>
         </footer>
       </div>

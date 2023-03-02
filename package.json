@@ -1,7 +1,9 @@
 {
   "name": "password-generator",
+  "displayName": "Password Generator",
+  "description": "A simple app help generate password",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

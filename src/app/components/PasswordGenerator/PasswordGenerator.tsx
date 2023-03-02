@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import Checkbox from "src/app/components/Checkbox/Checkbox";
-import Slider from "src/app/components/Slider/Slider";
+import { Checkbox, Slider } from "src/app/components";
+import { useDebounce } from "src/app/hooks";
 import { passwordGenerator, passwordStrengthChecker } from "src/app/services";
 import { PasswordSetting } from "src/app/types";
 
@@ -15,7 +15,6 @@ const PasswordGenerator = () => {
       max: 50,
     },
   };
-
   const [settings, setSettings] = useState<PasswordSetting>({
     length: config.passLength.defaultValue,
     uppercase: true,
@@ -23,26 +22,31 @@ const PasswordGenerator = () => {
     symbol: true,
     excludeAmbiguous: false,
   });
+
   const [password, setPassword] = useState<string>("");
-  const [pwdStrengthPoint, setPwdStrengthPoint] = useState<number>();
+  const [pwdStrengthPoint, setPwdStrengthPoint] = useState<number>(0);
+
+  const updateSetting = useDebounce(
+    (settingUpdated: { [key: string]: boolean | number }) => {
+      setSettings(
+        (settings) =>
+          (settings = {
+            ...settings,
+            ...settingUpdated,
+          })
+      );
+    },
+    0
+  );
 
   const createPassword = () => {
+    // Generate password
     const pwd = passwordGenerator(settings);
     setPassword(pwd);
+
+    // Check password strength
     const strengthPoint = passwordStrengthChecker(pwd);
     setPwdStrengthPoint(strengthPoint);
-  };
-
-  const updateSetting = (settingUpdated: {
-    [key: string]: boolean | number;
-  }) => {
-    setSettings(
-      (settings) =>
-        (settings = {
-          ...settings,
-          ...settingUpdated,
-        })
-    );
   };
 
   const copyClipboard = () => {
@@ -81,9 +85,15 @@ const PasswordGenerator = () => {
       </div>
 
       <div className={styles.passStrength}>
-        <span className={styles.actived}></span>
-        <span></span>
-        <span></span>
+        <span
+          className={pwdStrengthPoint > 0 ? styles.actived : undefined}
+        ></span>
+        <span
+          className={pwdStrengthPoint > 1 ? styles.actived : undefined}
+        ></span>
+        <span
+          className={pwdStrengthPoint > 2 ? styles.actived : undefined}
+        ></span>
       </div>
 
       <div className={styles.passLength}>

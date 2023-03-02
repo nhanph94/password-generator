@@ -4,7 +4,10 @@
 
 html {
   box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
+}
+
+input {
+  @apply outline-none;
 }
 
 input::-webkit-outer-spin-button,
@@ -16,4 +19,8 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+label[for="*"] {
+  @apply cursor-pointer;
 }

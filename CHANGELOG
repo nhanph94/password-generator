@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.2] - 2023-03-04
+
+Update UI
+
+### Fixed
+
+- Fix responsive UI on mobile
+
 ## [v0.1.1] - 2023-03-02
 
 Update SEO info for site

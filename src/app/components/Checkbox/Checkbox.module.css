@@ -1,5 +1,5 @@
 .checkboxRoot {
-  @apply flex gap-2 cursor-pointer;
+  @apply flex gap-2 cursor-pointer w-full;
 }
 
 .checkboxMask {

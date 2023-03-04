@@ -1,13 +1,13 @@
 .appRoot {
-  @apply h-screen flex flex-col items-center justify-center px-6 lg:px-0;
+  @apply h-screen flex flex-col items-center justify-center px-4 lg:px-0;
 
   background-image: linear-gradient(120deg, #64aaf8 0%, #3e65f5 100%);
 }
 
 .wrapper {
-  @apply mx-auto rounded-2xl p-8 w-full lg:w-[70vw] xl:w-[45vw] bg-white shadow transition-all duration-300;
+  @apply mx-auto rounded-2xl p-6 md:p-8 w-full lg:w-[70vw] xl:w-[45vw] bg-white shadow transition-all duration-300;
 }
 
 .title {
-  @apply text-4xl font-semibold;
+  @apply text-2xl md:text-4xl font-semibold;
 }
